@@ -120,12 +120,14 @@ class LidarLocatorNdt {
   inline bool IsMaploaded() const { return is_map_loaded_; }
   /**@brief Get the locator map. */
   inline const NdtMap& GetMap() const { return map_; }
+  /**@brief Get ndt matching score */
+  inline double GetFitnessScore() const { return fitness_score_; }
 
  private:
   /**@brief Whether initialized. */
-  bool is_initialized_;
+  bool is_initialized_ = false;
   /**@brief Whether map is loaded. */
-  bool is_map_loaded_;
+  bool is_map_loaded_ = false;
 
   /**@brief Estimated location. */
   Eigen::Affine3d location_;
@@ -139,22 +141,22 @@ class LidarLocatorNdt {
   Eigen::Affine3d pre_estimate_location_;
 
   /**@brief Resolution id of map. */
-  unsigned int resolution_id_;
+  unsigned int resolution_id_ = 0;
   /**@brief Zone id. */
-  int zone_id_;
+  int zone_id_ = 10;
 
   /**@brief The height of laser (the distance between laser and ground). */
-  double lidar_height_;
+  double lidar_height_ = 1.7;
   /**@brief Imu height of last frame (z-value). */
-  double pre_imu_height_;
+  double pre_imu_height_ = 0;
   /**@brief Extrinsic parameter between velodyne and imu. */
   Eigen::Affine3d velodyne_extrinsic_;
 
   /**@brief Filter size of map. */
-  int filter_x_;
-  int filter_y_;
+  int filter_x_ = 0;
+  int filter_y_ = 0;
   /**@brief Online pointclouds resoltion. */
-  float proj_reslution_;
+  float proj_reslution_ = 1.0;
 
   /**@brief The config file of map. */
   NdtMapConfig config_;
@@ -168,6 +170,9 @@ class LidarLocatorNdt {
   Eigen::Vector3d map_left_top_corner_;
   /**@brief NDT transform class. */
   NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> reg_;
+
+  /**@brief ndt matching score */
+  double fitness_score_ = 0.0;
 
   /**@brief maximum iterations for ndt matching*/
   int ndt_max_iterations_ = 10;
